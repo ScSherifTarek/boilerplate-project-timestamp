@@ -23,7 +23,10 @@ app.get("/api/timestamp/:date_string", function(req, res) {
   var date_string = req.params.date_string;
     var date;
     if(date_string) {
-      if ( (!isNaN(date_string) || date_string.match(/^\d{4}-\d{2}-\d{2}$/))) {
+      if(!isNaN(date_string)) {
+        var date = new Date(Number(date_string));
+      }
+      else if (date_string.match(/^\d{4}-\d{2}-\d{2}$/) ) {
         var date = new Date(date_string);
       }
       else {
@@ -33,16 +36,21 @@ app.get("/api/timestamp/:date_string", function(req, res) {
       }
     }
     else {
-     date = new Date(); 
+      date = new Date(); 
     }
 
     res.json({
       unix: date.getTime(),
       utc: date.toUTCString()
     });
-  } catch (ex) {
-    
-  }
+});
+
+app.get("/api/timestamp", function(req, res) {
+    var date = new Date(); 
+    res.json({
+      unix: date.getTime(),
+      utc: date.toUTCString()
+    });
 });
 
 // listen for requests :)
